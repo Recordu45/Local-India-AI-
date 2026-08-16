@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local India AI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="phone">
+  <header class="header">
+    <button class="menu">☰</button>
+    <div class="brand">🌿 <b>LOCAL<br>INDIA <span>AI</span></b></div>
+    <button class="lang">हिंदी⌄</button>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <h1>Namaste! 👋</h1>
+      <h2>मैं आपकी Local India AI</h2>
+      <p>पूछिए कुछ भी, मैं आपकी मदद करूँगा</p>
+      <div class="voice">
+        <div class="waves">〰〰〰</div>
+        <button id="mic">🎙</button>
+        <div class="waves">〰〰〰</div>
+      </div>
+      <b class="say">बोलिए, क्या चाहिए?</b>
+      <div class="input">
+        <input id="q" placeholder="या यहाँ लिखकर पूछिए...">
+        <button id="send">➤</button>
+      </div>
+    </section>
+
+    <section class="services">
+      <h3>Popular Services</h3>
+      <div class="service-grid">
+        <button data-q="Ara se Patna sabse sasta kaise jaaye?">🚌<small>यात्रा<br>Travel</small></button>
+        <button data-q="Bihar ki sarkari service chahiye">🏛️<small>सरकारी सेवाएँ</small></button>
+        <button data-q="Mujhe desk job chahiye">💼<small>नौकरी<br>Jobs</small></button>
+        <button data-q="Nearby bank batao">🏦<small>बैंकिंग</small></button>
+        <button data-q="Nearby hotel batao">🏨<small>होटल</small></button>
+        <button data-q="Nearby khana batao">🍴<small>खाना पीना</small></button>
+        <button data-q="Nearby mechanic chahiye">🔧<small>मरम्मत<br>Repair</small></button>
+        <button data-q="Aur services dikhao">▦<small>और सेवाएँ</small></button>
+      </div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-title">LOCAL INDIA AI <span>V1 DEMO</span></div>
+      <div id="answer"></div>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="active">⌂<small>Home</small></button>
+    <button>◷<small>History</small></button>
+    <button>♡<small>Saved</small></button>
+    <button>♙<small>Profile</small></button>
+  </nav>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
