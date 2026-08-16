@@ -4,270 +4,121 @@ const mic = document.getElementById("mic");
 const result = document.getElementById("result");
 const answer = document.getElementById("answer");
 
-function show(text) {
-  const s = text.toLowerCase();
+const API_URL = "http://localhost:3000/api/ask";
 
+async function askAI(message) {
   result.classList.remove("hidden");
 
-  // Travel
-  if (
-    (s.includes("ara") && s.includes("patna")) ||
-    s.includes("travel") ||
-    s.includes("यात्रा")
-  ) {
+  answer.innerHTML = `
+    <h4>🤖 Local India AI</h4>
+    <div class="card">
+      AI सोच रहा है...
+    </div>
+  `;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: message
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Server error");
+    }
+
     answer.innerHTML = `
-      <h4>Ara → Patna</h4>
-
-      <p>आपके लिए सस्ते travel options:</p>
+      <h4>🤖 Local India AI</h4>
 
       <div class="card">
-        <b>🚌 बस</b><br>
-        Approx ₹110–₹150<br>
-        <span>Budget option</span>
-      </div>
-
-      <div class="card">
-        <b>🚆 ट्रेन</b><br>
-        Approx ₹140–₹200<br>
-        <span>Usually economical</span>
-      </div>
-
-      <div class="card">
-        <b>🚕 Shared Cab</b><br>
-        Approx ₹250–₹350<br>
-        <span>More convenient</span>
-      </div>
-
-      <p>
-        Live fare और exact timing next phase में connect होंगे.
-      </p>
-    `;
-  }
-
-  // Jobs
-  else if (
-    s.includes("job") ||
-    s.includes("jobs") ||
-    s.includes("naukri") ||
-    s.includes("नौकरी") ||
-    s.includes("desk")
-  ) {
-    answer.innerHTML = `
-      <h4>💼 Job Assistant</h4>
-
-      <p>
-        आपकी qualification, skills और location के आधार पर
-        suitable local jobs खोजी जा सकती हैं.
-      </p>
-
-      <div class="card">
-        <b>📋 Profile Analysis</b><br>
-        Qualification + Skills + Experience
-      </div>
-
-      <div class="card">
-        <b>🎯 Skill Gap</b><br>
-        कौन-सी skills सीखनी हैं
-      </div>
-
-      <div class="card">
-        <b>💼 Job Matching</b><br>
-        Suitable jobs और salary range
+        ${formatAnswer(data.answer)}
       </div>
     `;
-  }
 
-  // Mechanic / Repair
-  else if (
-    s.includes("mechanic") ||
-    s.includes("repair") ||
-    s.includes("garage") ||
-    s.includes("मिस्त्री") ||
-    s.includes("मरम्मत")
-  ) {
+  } catch (error) {
+
+    console.error(error);
+
     answer.innerHTML = `
-      <h4>🔧 Nearby Mechanic</h4>
-
-      <p>
-        Location permission मिलने पर nearby mechanics
-        को distance, rating और availability के आधार पर
-        compare किया जाएगा.
-      </p>
+      <h4>⚠️ Connection Problem</h4>
 
       <div class="card">
-        <b>📍 Local Service Finder</b><br>
-        Nearby mechanics और repair services
-      </div>
-    `;
-  }
-
-  // Government Services
-  else if (
-    s.includes("government") ||
-    s.includes("sarkari") ||
-    s.includes("सरकारी") ||
-    s.includes("certificate") ||
-    s.includes("प्रमाण")
-  ) {
-    answer.innerHTML = `
-      <h4>🏛️ Government Services</h4>
-
-      <p>
-        आपको सरकारी service के लिए required documents,
-        process और official portal की जानकारी दी जाएगी.
-      </p>
-
-      <div class="card">
-        <b>📄 Documents</b><br>
-        कौन-कौन से documents चाहिए
-      </div>
-
-      <div class="card">
-        <b>📝 Process</b><br>
-        Step-by-step application process
-      </div>
-
-      <div class="card">
-        <b>🌐 Official Portal</b><br>
-        Official website से verified information
-      </div>
-    `;
-  }
-
-  // Banking
-  else if (
-    s.includes("bank") ||
-    s.includes("banking") ||
-    s.includes("बैंक")
-  ) {
-    answer.innerHTML = `
-      <h4>🏦 Banking Assistant</h4>
-
-      <p>
-        Nearby banks, branches, ATM और banking services
-        खोजने में मदद मिलेगी.
-      </p>
-
-      <div class="card">
-        <b>🏦 Nearby Bank</b><br>
-        Location के आधार पर nearby branches
-      </div>
-
-      <div class="card">
-        <b>💳 Banking Service</b><br>
-        Account, ATM, loan और अन्य services
-      </div>
-    `;
-  }
-
-  // Food
-  else if (
-    s.includes("food") ||
-    s.includes("khana") ||
-    s.includes("restaurant") ||
-    s.includes("खाना") ||
-    s.includes("रेस्टोरेंट")
-  ) {
-    answer.innerHTML = `
-      <h4>🍴 Local Food</h4>
-
-      <p>
-        आपके आसपास restaurants और food places
-        खोजने की सुविधा यहाँ होगी.
-      </p>
-
-      <div class="card">
-        <b>📍 Nearby Food</b><br>
-        Distance और rating के आधार पर options
-      </div>
-    `;
-  }
-
-  // Hotel
-  else if (
-    s.includes("hotel") ||
-    s.includes("stay") ||
-    s.includes("होटल")
-  ) {
-    answer.innerHTML = `
-      <h4>🏨 Nearby Hotels</h4>
-
-      <p>
-        Nearby hotels को price, distance और rating
-        के आधार पर compare किया जाएगा.
-      </p>
-
-      <div class="card">
-        <b>🏨 Stay Finder</b><br>
-        Budget और location के हिसाब से hotels
-      </div>
-    `;
-  }
-
-  // Generic response
-  else {
-    answer.innerHTML = `
-      <h4>नमस्ते 👋</h4>
-
-      <p>
-        मैंने आपका सवाल समझने की कोशिश की.
-        अभी Local India AI V1 demo mode में है.
-      </p>
-
-      <div class="card">
-        <b>Try करें:</b><br><br>
-
-        “Ara se Patna sabse sasta kaise jaaye?”<br><br>
-
-        “Mujhe desk job chahiye”<br><br>
-
-        “Nearby mechanic chahiye”
+        Backend से connection नहीं हो पाया.
+        <br><br>
+        Check करें कि Termux में:
+        <br><br>
+        <b>Local India AI backend running on port 3000</b>
+        <br><br>
+        दिखाई दे रहा है.
       </div>
     `;
   }
 }
 
 
-// Send button
-send.onclick = () => {
-  const text = q.value.trim();
+function formatAnswer(text) {
 
   if (!text) {
+    return "AI से कोई response नहीं मिला.";
+  }
+
+  return text
+    .replace(/\n/g, "<br>")
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+}
+
+
+// Send button
+send.onclick = () => {
+
+  const message = q.value.trim();
+
+  if (!message) {
     q.focus();
     return;
   }
 
-  show(text);
+  askAI(message);
 };
 
 
 // Enter key
-q.onkeydown = (event) => {
-  if (event.key === "Enter") {
-    const text = q.value.trim();
+q.addEventListener("keydown", (event) => {
 
-    if (text) {
-      show(text);
+  if (event.key === "Enter") {
+
+    const message = q.value.trim();
+
+    if (message) {
+      askAI(message);
     }
   }
-};
+});
 
 
-// Popular service buttons
+// Popular services
 document
   .querySelectorAll(".service-grid button")
   .forEach((button) => {
 
-    button.onclick = () => {
+    button.addEventListener("click", () => {
 
-      const text = button.dataset.q;
+      const message = button.dataset.q;
 
-      if (!text) return;
+      if (!message) return;
 
-      q.value = text;
+      q.value = message;
 
-      show(text);
-    };
+      askAI(message);
+    });
 
   });
 
@@ -292,31 +143,36 @@ mic.onclick = () => {
 
   recognition.lang = "hi-IN";
 
+  recognition.continuous = false;
+
   recognition.interimResults = false;
 
-  recognition.continuous = false;
 
   recognition.onstart = () => {
     mic.textContent = "🔴";
   };
 
+
   recognition.onend = () => {
     mic.textContent = "🎙";
   };
+
 
   recognition.onerror = () => {
     mic.textContent = "🎙";
   };
 
+
   recognition.onresult = (event) => {
 
-    const transcript =
+    const message =
       event.results[0][0].transcript;
 
-    q.value = transcript;
+    q.value = message;
 
-    show(transcript);
+    askAI(message);
   };
+
 
   recognition.start();
 };
